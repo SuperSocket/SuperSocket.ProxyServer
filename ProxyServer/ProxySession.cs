@@ -15,7 +15,7 @@ namespace SuperSocket.ProxyServer
         private TcpClientSession m_TargetSession;
         private Action<ProxySession, TcpClientSession> m_ConnectedAction;
 
-        internal ArraySegment<byte> BufferSegment { get; private set; }
+        private ArraySegment<byte> m_BufferSegment;
 
         public new ProxyAppServer AppServer
         {
@@ -43,7 +43,7 @@ namespace SuperSocket.ProxyServer
                 return;
             }
 
-            BufferSegment = buffer;
+            m_BufferSegment = buffer;
             targetSession.Connect();
         }
 
@@ -97,8 +97,11 @@ namespace SuperSocket.ProxyServer
             m_TargetSession.Send(buffer, offset, length);
         }
 
-        internal void CloseTargetSession()
+        protected override void OnSessionClosed(CloseReason reason)
         {
+            if(m_BufferSegment.Array != null)
+                AppServer.PushProxyBuffer(m_BufferSegment);
+
             if (m_TargetSession != null)
                 m_TargetSession.Close();
         }

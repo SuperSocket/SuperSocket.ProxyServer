@@ -53,13 +53,9 @@ namespace SuperSocket.ProxyServer
             return m_NullArraySegment;
         }
 
-        protected override void OnSessionClosed(ProxySession session, CloseReason reason)
+        internal void PushProxyBuffer(ArraySegment<byte> buffer)
         {
-            if (session.BufferSegment.Array != null)
-                m_BufferPool.Push(session.BufferSegment);
-
-            session.CloseTargetSession();
-            base.OnSessionClosed(session, reason);
+            m_BufferPool.Push(buffer);
         }
     }
 }
