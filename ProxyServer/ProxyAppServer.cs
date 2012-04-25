@@ -22,7 +22,7 @@ namespace SuperSocket.ProxyServer
 
         }
 
-        public override bool Setup(IRootConfig rootConfig, IServerConfig config, ISocketServerFactory socketServerFactory, IRequestFilterFactory<BinaryRequestInfo> requestFilterFactory)
+        protected override bool Setup(IRootConfig rootConfig, IServerConfig config, ISocketServerFactory socketServerFactory, IRequestFilterFactory<BinaryRequestInfo> requestFilterFactory)
         {
             if (!base.Setup(rootConfig, config, socketServerFactory, requestFilterFactory))
                 return false;

@@ -25,6 +25,13 @@ namespace SuperSocket.ProxyServer
             }
         }
 
+        public ProxyType Type { get; internal set; }
+
+        internal void SetNextRequestFilter(IRequestFilter<BinaryRequestInfo> requestFilter)
+        {
+            base.SetNextRequestFilter(requestFilter);
+        }
+
         internal void ConnectTarget(EndPoint remoteEndPoint, Action<ProxySession, TcpClientSession> connectedAction)
         {
             m_ConnectedAction = connectedAction;

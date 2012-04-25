@@ -5,9 +5,9 @@ using System.Text;
 
 namespace SuperSocket.ProxyServer
 {
-    public enum SocksVersion
+    public enum ProxyType
     {
-        None,
+        Http,
         Socks4,
         Socks4a,
         Socks5

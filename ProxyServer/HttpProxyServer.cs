@@ -14,5 +14,15 @@ namespace SuperSocket.ProxyServer
         {
 
         }
+
+        public override IAppSession CreateAppSession(ISocketSession socketSession)
+        {
+            var proxySession = base.CreateAppSession(socketSession) as ProxySession;
+
+            if (proxySession != null)
+                proxySession.Type = ProxyType.Http;
+
+            return proxySession;
+        }
     }
 }

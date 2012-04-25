@@ -12,14 +12,6 @@
     <AssemblyName>SuperSocket.ProxyServer</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,20 +33,20 @@
   <ItemGroup>
     <Reference Include="SuperSocket.ClientEngine.Common, Version=0.1.0.0, Culture=neutral, PublicKeyToken=ee9af13f57f00acc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\Debug\SuperSocket.ClientEngine.Common.dll</HintPath>
+      <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\$(Configuration)\SuperSocket.ClientEngine.Common.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.ClientEngine.Core">
-      <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\Debug\SuperSocket.ClientEngine.Core.dll</HintPath>
+      <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\$(Configuration)\SuperSocket.ClientEngine.Core.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.ClientEngine.Proxy, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\Debug\SuperSocket.ClientEngine.Proxy.dll</HintPath>
+      <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\$(Configuration)\SuperSocket.ClientEngine.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.Common">
-      <HintPath>..\Reference\SuperSocket\Net40\Debug\SuperSocket.Common.dll</HintPath>
+      <HintPath>..\Reference\SuperSocket\Net40\$(Configuration)\SuperSocket.Common.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.SocketBase">
-      <HintPath>..\Reference\SuperSocket\Net40\Debug\SuperSocket.SocketBase.dll</HintPath>
+      <HintPath>..\Reference\SuperSocket\Net40\$(Configuration)\SuperSocket.SocketBase.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
@@ -65,23 +57,34 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Socks5ProxyRequestFilter.cs" />
     <Compile Include="HttpProxyRequestFilter.cs" />
     <Compile Include="HttpProxyServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyAppServer.cs" />
     <Compile Include="ProxyDataRequestFilter.cs" />
     <Compile Include="ProxySession.cs" />
+    <Compile Include="Socks4ProxyRequestFilter.cs" />
     <Compile Include="SocksAppServer.cs" />
     <Compile Include="SocksProxyRequestFilter.cs" />
-    <Compile Include="SocksVersion.cs" />
+    <Compile Include="ProxyType.cs" />
+    <Compile Include="SocksProxyRequestFilterFactory.cs" />
+    <Compile Include="SocksSwitchRequestFilter.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
-    <Content Include="..\Reference\SuperSocket\Net40\Debug\SuperSocket.SocketEngine.dll">
+    <Content Include="Config\log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\log4net.unix.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\Reference\SuperSocket\Net40\$(Configuration)\SuperSocket.SocketEngine.dll">
       <Link>SuperSocket.SocketEngine.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="..\Reference\SuperSocket\Net40\Debug\SuperSocket.SocketService.exe">
+    <Content Include="..\Reference\SuperSocket\Net40\$(Configuration)\SuperSocket.SocketService.exe">
       <Link>SuperSocket.SocketService.exe</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
