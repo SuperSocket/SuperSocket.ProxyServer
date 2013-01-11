@@ -63,15 +63,26 @@ namespace SuperSocket.ProxyServer
 
             var headItems = line.Split(' ');
 
+            /*//if request is https, the protocol is http/1.0
             if (!PROTOCOL.Equals(headItems[2]))
             {
                 session.Logger.Error("protocol error: invalid request");
                 session.Close();
                 return null;
-            }
+            }*/
 
             var method = headItems[0];
-            var uri = new Uri(headItems[1].Trim());
+
+            var fullHost = headItems[1].Trim();
+            if (method.Equals(CONNECT))//http request, fullHost misses https.
+            {
+                if (!fullHost.StartsWith("https://"))
+                {
+                    fullHost = "https://" + fullHost;
+                }
+            }
+
+            var uri = new Uri(fullHost);
 
             if (string.IsNullOrEmpty(uri.Host))
             {
@@ -107,8 +118,8 @@ namespace SuperSocket.ProxyServer
             return null;
         }
 
-        private static byte[] m_OkResponse = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK");
-        private static byte[] m_FailedResponse = Encoding.ASCII.GetBytes("HTTP/1.1 400 FAILED");
+        private static byte[] m_OkResponse = Encoding.ASCII.GetBytes("HTTP/1.1 200 OK\r\n\r\n");
+        private static byte[] m_FailedResponse = Encoding.ASCII.GetBytes("HTTP/1.1 400 FAILED\r\n\r\n");
 
         private string m_SendingHeader;
 
@@ -122,9 +133,12 @@ namespace SuperSocket.ProxyServer
 
         private void OtherProxyConnectedHandle(ProxySession session, TcpClientSession targetSession)
         {
-            byte[] data = Encoding.ASCII.GetBytes(m_SendingHeader);
-            m_SendingHeader = null;
-            targetSession.Send(data, 0, data.Length);
+            if (targetSession != null)
+            {
+                byte[] data = Encoding.ASCII.GetBytes(m_SendingHeader);
+                m_SendingHeader = null;
+                targetSession.Send(data, 0, data.Length);
+            }
         }
     }
 }
