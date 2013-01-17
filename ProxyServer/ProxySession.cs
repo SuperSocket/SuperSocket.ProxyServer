@@ -27,9 +27,11 @@ namespace SuperSocket.ProxyServer
 
         public ProxyType Type { get; internal set; }
 
-        internal void SetNextRequestFilter(IRequestFilter<BinaryRequestInfo> requestFilter)
+        public string UserID { get; internal set; }
+
+        internal protected new void SetNextReceiveFilter(IReceiveFilter<BinaryRequestInfo> receiveFilter)
         {
-            base.SetNextRequestFilter(requestFilter);
+            base.SetNextReceiveFilter(receiveFilter);
         }
 
         internal void ConnectTarget(EndPoint remoteEndPoint, Action<ProxySession, TcpClientSession> connectedAction)
@@ -37,10 +39,10 @@ namespace SuperSocket.ProxyServer
             m_ConnectedAction = connectedAction;
             var targetSession = new AsyncTcpSession(remoteEndPoint);
             targetSession.ReceiveBufferSize = 2000000;
-            targetSession.Connected += new EventHandler(targetSession_Connected);
-            targetSession.Closed += new EventHandler(targetSession_Closed);
-            targetSession.DataReceived += new EventHandler<DataEventArgs>(targetSession_DataReceived);
-            targetSession.Error += new EventHandler<ErrorEventArgs>(targetSession_Error);
+            targetSession.Connected += targetSession_Connected;
+            targetSession.Closed += targetSession_Closed;
+            targetSession.DataReceived += targetSession_DataReceived;
+            targetSession.Error += targetSession_Error;
 
             var buffer = AppServer.RequestProxyBuffer();
 
@@ -58,19 +60,30 @@ namespace SuperSocket.ProxyServer
         {
             Logger.Error(e.Exception);
 
-            if (m_TargetSession == null)
+            var client = (AsyncTcpSession)sender;
+
+            if (!client.IsConnected)
             {
                 var connectedAction = m_ConnectedAction;
                 m_ConnectedAction = null;
                 connectedAction(this, null);
                 this.Close();
-                return;
             }
         }
 
         void targetSession_DataReceived(object sender, DataEventArgs e)
         {
-            this.SendResponse(e.Data, e.Offset, e.Length);
+            if (!this.Connected)
+                return;
+
+            try
+            {
+                this.Send(e.Data, e.Offset, e.Length);
+            }
+            catch
+            {
+
+            }
         }
 
         void targetSession_Closed(object sender, EventArgs e)
@@ -86,7 +99,6 @@ namespace SuperSocket.ProxyServer
         void targetSession_Connected(object sender, EventArgs e)
         {
             m_TargetSession = (AsyncTcpSession)sender;
-
             var connectedAction = m_ConnectedAction;
             m_ConnectedAction = null;
             connectedAction(this, m_TargetSession);

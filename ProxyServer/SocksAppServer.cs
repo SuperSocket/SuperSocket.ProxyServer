@@ -9,7 +9,7 @@ namespace SuperSocket.ProxyServer
     public class SocksProxyServer : ProxyAppServer
     {
         public SocksProxyServer()
-            : base(new SocksProxyRequestFilterFactory())
+            : base(new SocksProxyReceiveFilterFactory())
         {
 
         }

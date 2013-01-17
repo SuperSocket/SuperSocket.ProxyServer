@@ -10,19 +10,15 @@ namespace SuperSocket.ProxyServer
     public class HttpProxyServer : ProxyAppServer
     {
         public HttpProxyServer()
-            : base(new DefaultRequestFilterFactory<HttpProxyRequestFilter, BinaryRequestInfo>())
+            : base(new HttpProxyReceiveFilterFactory())
         {
 
         }
 
-        public override IAppSession CreateAppSession(ISocketSession socketSession)
+        protected override void OnNewSessionConnected(ProxySession session)
         {
-            var proxySession = base.CreateAppSession(socketSession) as ProxySession;
-
-            if (proxySession != null)
-                proxySession.Type = ProxyType.Http;
-
-            return proxySession;
+            session.Type = ProxyType.Http;
+            base.OnNewSessionConnected(session);
         }
     }
 }

@@ -31,19 +31,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="SuperSocket.ClientEngine.Common, Version=0.1.0.0, Culture=neutral, PublicKeyToken=ee9af13f57f00acc, processorArchitecture=MSIL">
+    <Reference Include="SuperSocket.ClientEngine.Common">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\$(Configuration)\SuperSocket.ClientEngine.Common.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.ClientEngine.Core">
       <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\$(Configuration)\SuperSocket.ClientEngine.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SuperSocket.ClientEngine.Proxy, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SuperSocket.ClientEngine.Proxy">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Reference\SuperSocket.ClientEngine\Net40\$(Configuration)\SuperSocket.ClientEngine.Proxy.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.Common">
       <HintPath>..\Reference\SuperSocket\Net40\$(Configuration)\SuperSocket.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="SuperSocket.Facility">
+      <HintPath>..\Reference\SuperSocket\Net40\$(Configuration)\SuperSocket.Facility.dll</HintPath>
     </Reference>
     <Reference Include="SuperSocket.SocketBase">
       <HintPath>..\Reference\SuperSocket\Net40\$(Configuration)\SuperSocket.SocketBase.dll</HintPath>
@@ -57,19 +60,20 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Socks5ProxyRequestFilter.cs" />
-    <Compile Include="HttpProxyRequestFilter.cs" />
+    <Compile Include="HttpProxyReceiveFilterFactory.cs" />
+    <Compile Include="Socks5ProxyReceiveFilter.cs" />
+    <Compile Include="HttpProxyReceiveFilter.cs" />
     <Compile Include="HttpProxyServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyAppServer.cs" />
-    <Compile Include="ProxyDataRequestFilter.cs" />
+    <Compile Include="ProxyDataReceiveFilter.cs" />
     <Compile Include="ProxySession.cs" />
-    <Compile Include="Socks4ProxyRequestFilter.cs" />
+    <Compile Include="Socks4ProxyReceiveFilter.cs" />
     <Compile Include="SocksAppServer.cs" />
-    <Compile Include="SocksProxyRequestFilter.cs" />
+    <Compile Include="SocksProxyReceiveFilter.cs" />
     <Compile Include="ProxyType.cs" />
-    <Compile Include="SocksProxyRequestFilterFactory.cs" />
-    <Compile Include="SocksSwitchRequestFilter.cs" />
+    <Compile Include="SocksProxyReceiveFilterFactory.cs" />
+    <Compile Include="SocksSwitchReceiveFilter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\log4net.config">

@@ -7,9 +7,9 @@ using SuperSocket.SocketBase;
 
 namespace SuperSocket.ProxyServer
 {
-    class Socks5ProxyRequestFilter : IRequestFilter<BinaryRequestInfo>
+    class Socks5ProxyReceiveFilter : IReceiveFilter<BinaryRequestInfo>
     {
-        public BinaryRequestInfo Filter(IAppSession<BinaryRequestInfo> session, byte[] readBuffer, int offset, int length, bool toBeCopied, out int left)
+        public BinaryRequestInfo Filter(byte[] readBuffer, int offset, int length, bool toBeCopied, out int left)
         {
             throw new NotImplementedException();
         }
@@ -19,7 +19,18 @@ namespace SuperSocket.ProxyServer
             get { throw new NotImplementedException(); }
         }
 
-        public IRequestFilter<BinaryRequestInfo> NextRequestFilter
+        public IReceiveFilter<BinaryRequestInfo> NextReceiveFilter
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+
+        public void Reset()
+        {
+            throw new NotImplementedException();
+        }
+
+        public FilterState State
         {
             get { throw new NotImplementedException(); }
         }

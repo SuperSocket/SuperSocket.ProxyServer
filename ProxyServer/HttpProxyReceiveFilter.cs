@@ -11,7 +11,7 @@ using SuperSocket.SocketBase.Protocol;
 
 namespace SuperSocket.ProxyServer
 {
-    class HttpProxyRequestFilter : RequestFilterBase<BinaryRequestInfo>
+    class HttpProxyReceiveFilter : ReceiveFilterBase<BinaryRequestInfo>
     {
         private static byte[] m_HeadSeparator = Encoding.ASCII.GetBytes("\r\n\r\n");
 
@@ -23,8 +23,17 @@ namespace SuperSocket.ProxyServer
 
         private SuperSocket.Common.SearchMarkState<byte> m_SearchState = new SuperSocket.Common.SearchMarkState<byte>(m_HeadSeparator);
 
-        public override BinaryRequestInfo Filter(IAppSession<BinaryRequestInfo> session, byte[] readBuffer, int offset, int length, bool toBeCopied, out int left)
+        private ProxySession m_Session;
+
+        public HttpProxyReceiveFilter(ProxySession session)
         {
+            m_Session = session;
+        }
+
+        public override BinaryRequestInfo Filter(byte[] readBuffer, int offset, int length, bool toBeCopied, out int left)
+        {
+            var session = m_Session;
+
             left = 0;
 
             int prevMatched = m_SearchState.Matched;
@@ -62,14 +71,6 @@ namespace SuperSocket.ProxyServer
             string line = lineReader.ReadLine();
 
             var headItems = line.Split(' ');
-
-            /*//if request is https, the protocol is http/1.0
-            if (!PROTOCOL.Equals(headItems[2]))
-            {
-                session.Logger.Error("protocol error: invalid request");
-                session.Close();
-                return null;
-            }*/
 
             var method = headItems[0];
 
@@ -114,7 +115,7 @@ namespace SuperSocket.ProxyServer
                 proxySession.ConnectTarget(targetEndPoint, OtherProxyConnectedHandle);
             }
 
-            NextRequestFilter = new ProxyDataRequestFilter();
+            NextReceiveFilter = new ProxyDataReceiveFilter(session);
             return null;
         }
 
@@ -126,9 +127,9 @@ namespace SuperSocket.ProxyServer
         private void ConnectProxyConnectedHandle(ProxySession session, TcpClientSession targetSession)
         {
             if (targetSession == null)
-                session.SendResponse(m_FailedResponse, 0, m_FailedResponse.Length);
+                session.Send(m_FailedResponse, 0, m_FailedResponse.Length);
             else
-                session.SendResponse(m_OkResponse, 0, m_OkResponse.Length);
+                session.Send(m_OkResponse, 0, m_OkResponse.Length);
         }
 
         private void OtherProxyConnectedHandle(ProxySession session, TcpClientSession targetSession)

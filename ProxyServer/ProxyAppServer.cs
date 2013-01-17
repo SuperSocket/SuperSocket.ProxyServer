@@ -16,17 +16,14 @@ namespace SuperSocket.ProxyServer
 
         private ArraySegment<byte> m_NullArraySegment = new ArraySegment<byte>();
 
-        public ProxyAppServer(IRequestFilterFactory<BinaryRequestInfo> requestFilterFactory)
-            : base(requestFilterFactory)
+        public ProxyAppServer(IReceiveFilterFactory<BinaryRequestInfo> receiveFilterFactory)
+            : base(receiveFilterFactory)
         {
 
         }
 
-        protected override bool Setup(IRootConfig rootConfig, IServerConfig config, ISocketServerFactory socketServerFactory, IRequestFilterFactory<BinaryRequestInfo> requestFilterFactory)
+        protected override bool Setup(IRootConfig rootConfig, IServerConfig config)
         {
-            if (!base.Setup(rootConfig, config, socketServerFactory, requestFilterFactory))
-                return false;
-
             int proxyReceiveBufferSize = config.ReceiveBufferSize;
 
             var buffer = new byte[proxyReceiveBufferSize * config.MaxConnectionNumber];
