@@ -2039,6 +2039,18 @@
             The filter state.
             </value>
         </member>
+        <member name="T:SuperSocket.SocketBase.Protocol.IReceiveFilterInitializer">
+            <summary>
+            Provide the initializing interface for ReceiveFilter
+            </summary>
+        </member>
+        <member name="M:SuperSocket.SocketBase.Protocol.IReceiveFilterInitializer.Initialize(SuperSocket.SocketBase.IAppServer,SuperSocket.SocketBase.IAppSession)">
+            <summary>
+            Initializes the ReceiveFilter with the specified appServer and appSession
+            </summary>
+            <param name="appServer">The app server.</param>
+            <param name="session">The session.</param>
+        </member>
         <member name="T:SuperSocket.SocketBase.Protocol.ReceiveFilterBase`1">
             <summary>
             Receive filter base class
@@ -3661,6 +3673,14 @@
             	<c>true</c> if this instance is running; otherwise, <c>false</c>.
             </value>
         </member>
+        <member name="P:SuperSocket.SocketBase.ISocketServer.SendingQueuePool">
+            <summary>
+            Gets the information of the sending queue pool.
+            </summary>
+            <value>
+            The sending queue pool.
+            </value>
+        </member>
         <member name="T:SuperSocket.SocketBase.ISocketServerFactory">
             <summary>
             The interface for socket server factory
@@ -3679,6 +3699,11 @@
         <member name="T:SuperSocket.SocketBase.CloseReason">
             <summary>
             CloseReason enum
+            </summary>
+        </member>
+        <member name="F:SuperSocket.SocketBase.CloseReason.Unknown">
+            <summary>
+            The socket is closed for unknown reason
             </summary>
         </member>
         <member name="F:SuperSocket.SocketBase.CloseReason.ServerShutdown">
@@ -3719,11 +3744,6 @@
         <member name="F:SuperSocket.SocketBase.CloseReason.InternalError">
             <summary>
             SuperSocket internal error
-            </summary>
-        </member>
-        <member name="F:SuperSocket.SocketBase.CloseReason.Unknown">
-            <summary>
-            The socket is closed for unknown reason
             </summary>
         </member>
         <member name="T:SuperSocket.SocketBase.ISocketSession">
@@ -3792,6 +3812,14 @@
             <summary>
             Gets the app session assosiated with this socket session.
             </summary>
+        </member>
+        <member name="P:SuperSocket.SocketBase.ISocketSession.OrigReceiveOffset">
+            <summary>
+            Gets the original receive buffer offset.
+            </summary>
+            <value>
+            The original receive buffer offset.
+            </value>
         </member>
         <member name="T:SuperSocket.SocketBase.LoggerExtension">
             <summary>
@@ -3997,6 +4025,22 @@
             </summary>
             <value>
             The listeners.
+            </value>
+        </member>
+        <member name="P:SuperSocket.SocketBase.ServerSummary.AvialableSendingQueueItems">
+            <summary>
+            Gets or sets the avialable sending queue items.
+            </summary>
+            <value>
+            The avialable sending queue items.
+            </value>
+        </member>
+        <member name="P:SuperSocket.SocketBase.ServerSummary.TotalSendingQueueItems">
+            <summary>
+            Gets or sets the total sending queue items.
+            </summary>
+            <value>
+            The total sending queue items.
             </value>
         </member>
         <member name="T:SuperSocket.SocketBase.SessionHandler`1">
@@ -4701,14 +4745,14 @@
             Sends the response.
             </summary>
             <param name="segment">The segment which will be sent.</param>
-            <returns>Indicate whether the message was pushed into the sending queue</returns>
+            <returns>Indicate whether the message was pushed into the sending queue; if it returns false, the sending queue may be full or the socket is not connected</returns>
         </member>
         <member name="M:SuperSocket.SocketBase.AppSession`2.TrySend(System.Collections.Generic.IList{System.ArraySegment{System.Byte}})">
             <summary>
             Try to send the data segments to clinet.
             </summary>
             <param name="segments">The segments.</param>
-            <returns>Indicate whether the message was pushed into the sending queue</returns>
+            <returns>Indicate whether the message was pushed into the sending queue; if it returns false, the sending queue may be full or the socket is not connected</returns>
         </member>
         <member name="M:SuperSocket.SocketBase.AppSession`2.Send(System.Collections.Generic.IList{System.ArraySegment{System.Byte}})">
             <summary>
